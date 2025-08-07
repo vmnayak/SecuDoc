@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Secure Document</title>
+
+  <!-- Bootstrap CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="document.css" />
+</head>
+
+<body>
+  <div class="wrapper d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar border-end shadow" id="sidebar">
+      <div class="sidebar-header d-flex align-items-center justify-content-center py-3 border-bottom">
+        <i class="bi bi-shield-lock fs-2 text-primary"></i>
+        <span class="ms-2 fw-bold fs-4 sidebar-text text-primary">SECUDOC</span>
+      </div>
+      <div class="list-group list-group-flush">
+        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+          <i class="bi bi-speedometer2"></i>
+          <span class="ms-2 sidebar-text">Dashboard</span>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+          <i class="bi bi-person-circle"></i>
+          <span class="ms-2 sidebar-text">Profile</span>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+          <i class="bi bi-file-earmark-pdf"></i>
+
+          <span class="ms-2 sidebar-text">Document</span>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+          <i class="bi bi-calendar-event"></i>
+          <span class="ms-2 sidebar-text">Events</span>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+          <i class="bi bi-person-lines-fill"></i>
+          <span class="ms-2 sidebar-text">Professors</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content flex-grow-1">
+      <nav class="navbar navbar-expand-lg navbar-light bg-primary text-white shadow-sm sticky-top">
+        <div class="container-fluid">
+          <button class="btn btn-light" id="menu-toggle">
+            <i class="bi bi-list"></i>
+          </button>
+          <a class="navbar-brand ms-3 text-white fw-bold" href="#">Secure Document</a>
+          <div class="ms-auto">
+            <img src="profile.png" id="profile-icon" alt="Profile" class="rounded-circle border border-light" width="40"
+              height="40" style="cursor: pointer;">
+          </div>
+        </div>
+      </nav>
+
+      <!-- ------------------------------------------------------------------- -->
+<div class="card shadow mt-4">
+  <div class="card-header bg-primary text-white fw-bold">
+    Upload Document
+  </div>
+  <div class="card-body">
+    <form id="document-form" method="POST" enctype="multipart/form-data">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="owner" class="form-label">Owner</label>
+          <input type="text" class="form-control" id="owner" name="owner" placeholder="Enter owner name or ID" required>
+        </div>
+        <div class="col-md-6">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="title" name="title" placeholder="Document title" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter document description"></textarea>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="file" class="form-label">Upload File</label>
+          <input type="file" class="form-control" id="file" name="file" required>
+        </div>
+        <div class="col-md-6">
+          <label for="file_type" class="form-label">File Type</label>
+          <input type="text" class="form-control" id="file_type" name="file_type" placeholder="e.g. PDF, DOCX" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="encryption_key" class="form-label">Encryption Key</label>
+          <input type="text" class="form-control" id="encryption_key" name="encryption_key" placeholder="Enter encryption key" required>
+        </div>
+      </div>
+
+      <div class="text-end">
+        
+        <button type="submit" class="btn btn-primary">Submit Document</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+  <!-- Profile Popup Panel -->
+  <div id="profile-panel" class="profile-popup-container">
+    <div class="profile-wrapper">
+      <button id="close-profile-panel" class="close-icon">&times;</button>
+      <div class="profile-header">
+        <img src="profile.png" alt="User" class="profile-img">
+        <h3 class="username">John Doe</h3>
+        <p class="email">johndoe@example.com</p>
+      </div>
+      <div class="profile-actions">
+        <button class="btn">Manage Your Account</button>
+        <button class="btn" id="open-password-panel">Change Password</button>
+        <button class="btn logout">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Popup -->
+  <div id="change-password-panel" class="profile-popup-container">
+    <div class="profile-wrapper">
+      <button id="close-password-panel" class="close-icon">&times;</button>
+      <div class="profile-header">
+        <h3 class="username">Change Password</h3>
+        <p class="email text-muted">Update your account security</p>
+      </div>
+      <form id="change-password-form">
+        <div class="mb-3 text-start">
+          <label for="current-password" class="form-label">Current Password</label>
+          <input type="password" class="form-control" id="current-password" placeholder="Current password" required>
+        </div>
+        <div class="mb-3 text-start">
+          <label for="new-password" class="form-label">New Password</label>
+          <div class="position-relative">
+            <input type="password" class="form-control" id="signupPassword" placeholder="New password">
+            <i class="bi bi-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 password-toggle"
+              data-target="signupPassword" style="cursor:pointer;"></i>
+          </div>
+        </div>
+        <div class="mb-3 text-start">
+          <label for="confirm-password" class="form-label">Confirm New Password</label>
+          <div class="position-relative">
+            <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm password">
+            <i class="bi bi-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 password-toggle"
+              data-target="signupConfirmPassword" style="cursor:pointer;"></i>
+          </div>
+        </div>
+        <div id="passwordError" class="text-danger mt-1" style="display:none;">Passwords do not match</div>
+        <button type="submit" class="btn btn-primary w-100 mt-2">Update Password</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div id="popup-overlay" class="popup-overlay"></div>
+  <!-- jQuery and Select2 JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="redact.js"></script> <!-- Your custom logic -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  <script src="auth.js"></script>
+
+  <script>
+    // Highlight selected options
+  // redact.js
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize all Select2 dropdowns
+  $('.select2').select2({
+    theme: 'bootstrap-5',
+    width: '100%',
+    placeholder: 'Select an option',
+    allowClear: true
+  });
+
+  // Optional: handle selected state visually
+  document.querySelectorAll(".styled-select").forEach(select => {
+    select.addEventListener("change", function () {
+      this.classList.add("selected");
+    });
+  });
+});
+
+
+  </script>
+</body>
+
+</html>

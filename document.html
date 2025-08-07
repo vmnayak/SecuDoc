@@ -1,0 +1,106 @@
+<div class="card shadow mt-4">
+  <div class="card-header bg-primary text-white fw-bold">
+    Upload Document
+  </div>
+  <div class="card-body">
+    <form id="document-form" method="POST" enctype="multipart/form-data">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="owner" class="form-label">Owner</label>
+          <input type="text" class="form-control" id="owner" name="owner" placeholder="Enter owner name or ID" required>
+        </div>
+        <div class="col-md-6">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="title" name="title" placeholder="Document title" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter document description"></textarea>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="file" class="form-label">Upload File</label>
+          <input type="file" class="form-control" id="file" name="file" required>
+        </div>
+        <div class="col-md-6">
+          <label for="file_type" class="form-label">File Type</label>
+          <input type="text" class="form-control" id="file_type" name="file_type" placeholder="e.g. PDF, DOCX" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="encryption_key" class="form-label">Encryption Key</label>
+          <input type="text" class="form-control" id="encryption_key" name="encryption_key" placeholder="Enter encryption key" required>
+        </div>
+      </div>
+
+      <div class="text-end">
+        
+        <button type="submit" class="btn btn-primary">Submit Document</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+  <div class="card shadow mt-4">
+        <div class="card-header bg-primary text-white fw-bold">
+          Redacted Document
+        </div>
+        <div class="card-body">
+          <form id="document-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="original" class="form-label">Original Document</label>
+                <select class="form-control styled-select select2" id="original" name="original" required>
+                  <option value="" disabled selected>Select original document</option>
+                  {% for doc in documents %}
+                  <option value="{{ doc.id }}">{{ doc.title }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="redacted_file" class="form-label">Redacted File</label>
+                <input type="file" class="form-control" id="redacted_file" name="redacted_file" required>
+              </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="redacted_by" class="form-label">Redacted By</label>
+                <select class="form-control styled-select select2" id="redacted_by" name="redacted_by" required>
+                  <option value="" disabled selected>Select user</option>
+                  {% for user in users %}
+                  <option value="{{ user.id }}">{{ user.username }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="3"
+                  placeholder="Enter notes or remarks"></textarea>
+              </div>
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Submit Document</button>
+            </div>
+          </form>
+        </div>
+      </div>

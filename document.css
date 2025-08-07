@@ -1,0 +1,86 @@
+/* Card Styling */
+.card {
+    margin: 2%;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Card Header */
+.card-header {
+  font-size: 1.25rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid #0d6efd; /* Bootstrap primary color */
+}
+
+/* Card Body */
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Input & Textarea Fields */
+.card-body .form-control {
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ced4da;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-body .form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+}
+
+/* Labels */
+.card-body .form-label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #343a40;
+}
+
+/* Submit Button */
+.card-body .btn-primary {
+  padding: 0.6rem 2rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.card-body .btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .card-body .row {
+    flex-direction: column;
+  }
+
+  .card-body .col-md-6,
+  .card-body .col-md-12 {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Styled Select Dropdowns */
+.styled-select {
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ced4da;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg fill='gray' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+}
+
+.styled-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+  outline: none;
+}
