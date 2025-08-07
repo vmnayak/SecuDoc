@@ -1,0 +1,23 @@
+<h2>Verify Your Email</h2>
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
+
+{% if messages %}
+  {% for message in messages %}
+    <p style="color:green;">{{ message }}</p>
+  {% endfor %}
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+  <label>Enter OTP sent to your email:</label>
+  <input type="text" name="otp" required>
+  <button type="submit">Verify</button>
+</form>
+
+<!-- Resend OTP Link -->
+<p>Didn't receive the OTP?
+  <a href="{% url 'resend_otp' user_id=request.resolver_match.kwargs.user_id %}">Resend OTP</a>
+</p>
