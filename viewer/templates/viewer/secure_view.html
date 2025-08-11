@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 40%;
+            left: 30%;
+            font-size: 30px;
+            color: rgba(0, 0, 0, 0.2);
+            transform: rotate(-30deg);
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        #pdf-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="watermark">
+    {{ username }} | {{ ip }} | {{ now|date:"Y-m-d H:i:s" }}
+</div>
+
+{% if document.file_type == 'pdf' %}
+    <div id="pdf-container" style="overflow-y: scroll; height: 100vh; background: #f0f0f0; padding: 10px;">
+        <!-- Pages will be rendered here -->
+    </div>
+
+    <script>
+        // Disable right click
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Disable F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I
+        document.onkeydown = function(e) {
+            if (
+                e.keyCode == 123 || // F12
+                (e.ctrlKey && e.shiftKey && e.keyCode == 73) || // Ctrl+Shift+I
+                (e.ctrlKey && e.keyCode == 85) || // Ctrl+U
+                (e.ctrlKey && e.keyCode == 83)    // Ctrl+S
+            ) {
+                return false;
+            }
+        };
+    </script>
+
+    <!-- Load PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+        const url = "{{ document_url }}";
+        const watermarkText = `{{ username }} | {{ ip }} | {{ now|date:'Y-m-d H:i:s' }}`;
+        const container = document.getElementById('pdf-container');
+
+        function renderPDFPage(page) {
+            const viewport = page.getViewport({ scale: 1.5 }); // Scale for clarity
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            canvas.style.display = 'block';
+            canvas.style.margin = '10px auto';
+            container.appendChild(canvas);
+
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+
+            return page.render(renderContext).promise.then(function() {
+                // Draw watermark
+                ctx.save();
+                ctx.globalAlpha = 0.2;
+                const fontSize = Math.max(24, Math.floor(canvas.width / 20));
+                ctx.font = fontSize + "px Arial";
+                ctx.translate(canvas.width * 0.5, canvas.height * 0.5);
+                ctx.rotate(-Math.PI / 6);
+                ctx.fillStyle = "#000";
+                ctx.textAlign = "center";
+                ctx.fillText(watermarkText, 0, 0);
+                ctx.restore();
+            });
+        }
+
+        function loadPDF() {
+            pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    pdf.getPage(i).then(renderPDFPage);
+                }
+            }).catch(function(error) {
+                container.innerHTML = `<div style='color:red;'>PDF Error: ${error.message}</div>`;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadPDF);
+    </script>
+
+{% elif document.file_type == 'image' %}
+    <img src="{{ document.file.url }}" style="width:100%; height:auto;" />
+{% endif %}
+
+
+</body>
+</html>

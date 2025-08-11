@@ -1,0 +1,37 @@
+<h2>Task: {{ task.title }}</h2>
+<p>Uploaded: {{ task.created_at }}</p>
+
+<h3>Original file</h3>
+{% if task.original_file %}
+  <a href="{{ task.original_file.url }}" target="_blank">Download original</a>
+{% endif %}
+
+<h3>Regions</h3>
+<ul>
+  {% for r in task.regions.all %}
+    <li>Page {{ r.page_number }} — x:{{ r.x }}, y:{{ r.y }}, w:{{ r.width }}, h:{{ r.height }} — {{ r.label }}</li>
+  {% empty %}
+    <li>No regions</li>
+  {% endfor %}
+</ul>
+
+<h3>Add region (manual)</h3>
+<form method="post" action="{% url 'redaction:add_region' task.id %}">
+  {% csrf_token %}
+  {{ region_form.as_p }}
+  <button type="submit">Add region</button>
+</form>
+
+<form method="post" action="{% url 'redaction:process_task' task.id %}">
+  {% csrf_token %}
+  <button type="submit">Process Redaction</button>
+</form>
+
+{% if task.processed %}
+  <h3>Redacted file</h3>
+  <a href="{{ task.redacted_file.url }}" target="_blank">Download redacted file</a>
+{% endif %}
+
+{% if task.error_msg %}
+  <pre style="color:red">{{ task.error_msg }}</pre>
+{% endif %}

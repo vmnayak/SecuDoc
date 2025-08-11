@@ -1,0 +1,4 @@
+<h2>Share Details</h2>
+<p>Document: {{ share.document.title }}</p>
+<p>Link: <a href="{{ signed_link }}" target="_blank">{{ signed_link }}</a></p>
+<p>Expires at: {{ share.expires_at|default:"Never" }}</p>

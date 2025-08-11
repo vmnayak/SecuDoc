@@ -1,0 +1,12 @@
+<h2>Your Documents</h2>
+<ul>
+    {% for doc in documents %}
+        <li>{{ doc.title }} | {{ doc.file_type }} | Uploaded on {{ doc.created_at }} </li>
+        <li><a href="{% url 'secure_view_document' doc.id %}">View</a></li>
+        <li><a href="{% url 'sharing:create_share' doc.id %}">Share</a></li>
+    {% empty %}
+        <li>No documents uploaded yet.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'upload_document' %}">Upload new document</a>
+
