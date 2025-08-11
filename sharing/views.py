@@ -59,3 +59,30 @@ def access_shared_document(request, token):
         'ip': request.META.get('REMOTE_ADDR'),
         'now': timezone.now(),
     })
+
+@login_required
+def shared_with_me(request):
+    # Get all shares for this logged-in user
+    shared_docs = DocumentShare.objects.filter(shared_with_user=request.user)
+    return render(request, 'sharing/shared_with_me.html', {'shared_docs': shared_docs})
+
+@login_required
+def open_shared_document(request, share_id):
+    share = get_object_or_404(DocumentShare, id=share_id, shared_with_user=request.user)
+    document = share.document
+
+    # Pass document to secure viewer template in viewer app
+    from viewer.views import get_client_ip  # reuse your existing function
+    return render(request, 'viewer/secure_view.html', {
+        'document': document,
+        'document_url': document.file.url,  # Local path (protected if needed)
+        'username': request.user.username,
+        'ip': get_client_ip(request),
+        'now': timezone.now(),
+    })
+
+@login_required
+def delete_shared_document(request, share_id):
+    share = get_object_or_404(DocumentShare, id=share_id, shared_with=request.user)
+    share.delete()
+    return redirect('sharing:shared_with_me')
